@@ -21,6 +21,18 @@ function TableUtil:Clone<T>(Table:T):T
 	return NewTable
 end
 
+
+function TableUtil:Clear<T>(Table:T):{}
+	local NewTable = table.clone(Table)
+	for i,v in NewTable do
+		if type(v) == "table" then
+			TableUtil:Clear(v)
+		end
+	end
+	table.clear(Table)
+	return NewTable
+end
+
 function TableUtil:Overwrite<T1,T2>(Table1:T1,Table2:T2)
 	assert(type(Table1) == "table" and type(Table1) == type(Table2), "Table1 or Table2 not a table")
 
