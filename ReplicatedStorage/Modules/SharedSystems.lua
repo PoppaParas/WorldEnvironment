@@ -1,20 +1,27 @@
 -- @ScriptType: ModuleScript
-local Indexes = require(game.ReplicatedStorage.Indexes)
-
 local Level1 = script.Level1
 local Level2 = script.Level2
+local Utils = script.Utils
 
 local SharedSystems = {
-	Level1 = {
+	Modules = {
+		-- Level1 modules
 		IndexManager = require(Level1.IndexManager),
-		Test = require(Level1.Test)
-	},
-	Level2 = {
-		
+		NetworkManager = require(Level2.NetworkManager),
+
+		-- Level2 modules
+		AnimManager = require(Level2.AnimManager),
+		EventManager = require(Level2.EventManager),
+		Test = require(Level2.Test),
+		ThreadManager = require(Level2.ThreadManager),
+
+		-- Utils modules
+		Algorithms = require(Utils.Algorithms),
+		List = require(Utils.List),
+		TableUtil = require(Utils.TableUtil),
+
 	}
 }
 
-SharedSystems.Level1.Test("Hi")
-
-
 return SharedSystems
+
