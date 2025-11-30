@@ -7,11 +7,12 @@ local Libraries = script.Parent.Parent
 local Level1 = Libraries:WaitForChild("Level1")
 local Utils = Libraries:WaitForChild("Utils")
 
-local Anims = ReplicatedStorage:WaitForChild("Anims")
 
 local List = require(Utils:WaitForChild("List"))
+local IndexManager = require(Level1:WaitForChild("IndexManager"))
 local CurrentAnimators:List.ListObjectType<Instance,AnimatorObjectType> = List.new()
 
+local Anims = IndexManager.ObjectIndexes.Anims
 
 local AnimManager = {
 	CurrentAnimators = CurrentAnimators
