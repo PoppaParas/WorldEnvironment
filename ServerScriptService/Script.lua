@@ -29,11 +29,12 @@ local NewObj = NewObj:Append(
 	}
 )
 task.spawn(function()
-	task.wait(15)
-	NewObj:Fire("Test2")
-	NewObj:Fire("Test2")
+	task.wait(10)
+	NewObj:Disconnect("Test2")
 end)
 
 print("Test1")
 NewObj:WaitUntil("Test2")
 print("Completed!")
+
+
