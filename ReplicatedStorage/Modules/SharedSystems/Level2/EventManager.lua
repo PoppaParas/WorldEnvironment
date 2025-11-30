@@ -19,6 +19,8 @@ local TableUtil = require(Utils.TableUtil)
 local EventManager = {}
 local EventObject = {}
 EventObject.__index = EventObject
+local EventSingleton = {}
+EventSingleton.__index = EventSingleton
 
 --Types
 
@@ -37,8 +39,9 @@ type DefaultEventList = {
 export type Event<Args,Func> = {
 	Args:Args|DefaultArg,
 	Func:Func|DefaultFunc,
+	Disconnected:boolean?,
 	Waiting:{thread}
-}
+} & typeof(EventSingleton.__index)
 export type EventObject<EventList,Args,Func> = {
 	List:EventList,
 	
@@ -49,7 +52,7 @@ export type EventObject<EventList,Args,Func> = {
 export type DefaultEventObject = EventObject<DefaultEventList,
 DefaultArg,DefaultFunc>
 
-export type DefaultEvent = Event<
+export type DefaultEventSingleton = Event<
 DefaultArg,DefaultFunc>
 
 
@@ -83,6 +86,7 @@ function EventManager.CreateEvent<T2,T3>(Func:T2,ReturnArgs:T3|DefaultArg)
 		Func = Func,
 		Waiting = {}
 	}
+	Event = setmetatable(Event,EventSingleton)
 	return Event
 	end
 end
@@ -96,6 +100,9 @@ end
 function EventObject._CreateEvent<SelfType,T1,T2,T3>(self:SelfType,EventName:T1,Func:T2,ReturnArgs:T3|DefaultArg)
 	if ValidateEventCreation(Func,ReturnArgs) then
 	local self:SelfType = self
+	if self.List[EventName] then 
+		return self.List[EventName]
+	end
 	local Event = EventManager.CreateEvent(Func,ReturnArgs)
 	
 	
@@ -128,14 +135,9 @@ function EventObject._Fire<SelfType, EventNameType>(
 	type ListType = typeof(self.List)
 	
 	if self.List[EventName] then
-		local Event:DefaultEvent = self.List[EventName]
-		for i,v in Event.Waiting do
-			pcall(coroutine.resume,v)
-		end
-		return ThreadManager:CreateThread(nil,function()
-
-				return Event.Func(Event.Args())
-		end)
+		local Event:DefaultEventSingleton = self.List[EventName]
+		Event:Fire()
+		
 	end
 	--end
 	local self:typeof(self) = self
@@ -148,10 +150,40 @@ function EventObject:Fire<T1>(EventName:T1)
 end
 
 --@private
+function EventObject._Disconnect<SelfType, EventNameType>(
+	self: SelfType,
+	EventName: EventNameType
+)
+	--if typeof(self.List) == "table" then
+	type ListType = typeof(self.List)
+
+	if self.List[EventName] then
+		local Event:DefaultEventSingleton = self.List[EventName]
+		Event:Disconnect()
+
+	end
+	--end
+	local self:typeof(self) = self
+	return self
+
+end
+function EventObject:Disconnect<T1>(EventName:T1)
+
+	return EventObject._Disconnect(self,EventName)
+end
+
+
+
+
+--@private
 function EventObject._Append<SelfType,T1>(self:SelfType,Funcs:T1)
 	if typeof(Funcs) == "table" then
-		--local self:DefaultEventObject & typeof(self) = self
+		local self:DefaultEventObject & typeof(self) = self
 		for i,v in Funcs do
+			local Ev:DefaultEventSingleton = self.List[i]
+			if Ev then 
+				Ev:Disconnect()
+			end
 			self.List[i] = v 
 		end
 		
@@ -178,7 +210,7 @@ function EventObject._WaitUntil<SelfType,T1>(self:SelfType,Event:T1)
 	
 	
 	if typeof(Event) == "string" and self.List[Event] then
-		local FoundEvent:DefaultEvent = self.List[Event]
+		local FoundEvent:DefaultEventSingleton = self.List[Event]
 		
 		
 		local Thr = coroutine.running()
@@ -199,6 +231,33 @@ function EventObject:WaitUntil<T1>(Event:T1)
 	return NewObject
 end
 
+function EventSingleton:ReleaseAll()
+	local self:typeof(self) & DefaultEventSingleton = self
+	for i,v in self.Waiting do
+		pcall(coroutine.resume,v)
+	end
+end
+
+function EventSingleton:Disconnect()
+	local self:DefaultEventSingleton & typeof(self) = self
+	self:ReleaseAll()
+	
+	TableUtil:Clear(self)
+	
+	self.Disconnected = true
+end
+
+function EventSingleton:Fire()
+	local self: typeof(self) & DefaultEventSingleton = self
+	if self.Disconnected then
+
+		return end
+	self:ReleaseAll()
+	return ThreadManager:CreateThread(nil,function()
+
+		return self.Func(self.Args())
+	end)
+end
 
 
 
