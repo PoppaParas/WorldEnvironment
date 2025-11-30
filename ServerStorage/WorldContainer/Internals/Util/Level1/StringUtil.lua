@@ -1,4 +1,5 @@
 -- @ScriptType: ModuleScript
+-- @ScriptType: ModuleScript
 --[[
 paras_cold, 10/21/25
 Additional utilities for string types
