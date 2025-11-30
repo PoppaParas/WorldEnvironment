@@ -29,6 +29,7 @@ Base.Workspace = workspace
 local RepStorage = Base.ReplicatedStorage
 
 Base.Assets = RepStorage:WaitForChild("Assets")
+Base.Anims = Base.Assets:WaitForChild("Anims")
 
 
 
