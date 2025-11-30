@@ -11,6 +11,7 @@ local RelevantServices = {
 	game.Workspace,
 	game.Players,
 	workspace,
+	game.ServerStorage,
 	game:GetService("Lighting"),
 	game.StarterPack
 }
