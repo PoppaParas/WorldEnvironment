@@ -1,4 +1,5 @@
 -- @ScriptType: ModuleScript
+-- @ScriptType: ModuleScript
 local ObjectManager = {}
 local Object = {}
 Object.__Index = Object
