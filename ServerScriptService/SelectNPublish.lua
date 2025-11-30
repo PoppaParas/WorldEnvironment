@@ -1,3 +1,4 @@
+-- @ScriptType: ModuleScript
 -- @ScriptType: Script
 -- Plugin: Select all scripts in common services on button click
 
