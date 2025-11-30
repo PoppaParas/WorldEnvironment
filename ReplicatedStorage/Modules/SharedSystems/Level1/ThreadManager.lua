@@ -1,11 +1,11 @@
 -- @ScriptType: ModuleScript
 local RepStorage = game:GetService("ReplicatedStorage")
 
-local Libraries = RepStorage:WaitForChild("Libraries")
+local Libraries = script.Parent.Parent
 
-local Core = Libraries:WaitForChild("Core")
+local Utils = Libraries:WaitForChild("Utils")
 
-local List = require(Core:WaitForChild("List"))
+local List = require(Utils:WaitForChild("List"))
 
 local ThreadManager = {}
 local ThreadList:List.ListObjectType<string,thread> = List.new()
