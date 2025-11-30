@@ -1,4 +1,5 @@
 -- @ScriptType: ModuleScript
+-- @ScriptType: ModuleScript
 
 local Internals = script.Internals
 
@@ -37,11 +38,13 @@ local StackObject3 = StackObject2:Register({
 
 local WorldManager = {}
 
-export type Environment = {
-	
+export type WorldPlayConfig = {
+	DebugMode:boolean?
 }
+local WorldConfigDefault = {}
 
-function WorldManager:CreateEnvironment()
+
+function WorldManager:Play(Config)
 	
 end
 
