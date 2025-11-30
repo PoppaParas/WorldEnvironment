@@ -13,7 +13,7 @@ local SharedSystems = {
 		AnimManager = require(Level2.AnimManager),
 		EventManager = require(Level2.EventManager),
 		Test = require(Level2.Test),
-		ThreadManager = require(Level2.ThreadManager),
+		ThreadManager = require(Level1.ThreadManager),
 
 		-- Utils modules
 		Algorithms = require(Utils.Algorithms),
