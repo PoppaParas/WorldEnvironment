@@ -1,4 +1,5 @@
 -- @ScriptType: ModuleScript
+-- @ScriptType: ModuleScript
 local WorldObject = script.Parent.Parent
 
 local Util = WorldObject.Util
