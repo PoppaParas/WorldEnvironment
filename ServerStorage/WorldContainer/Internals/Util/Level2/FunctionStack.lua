@@ -1,4 +1,5 @@
 -- @ScriptType: ModuleScript
+--!nonstrict
 --[[
 	paras_cold
 	10/21/25
