@@ -4,8 +4,10 @@ local RepStorage = game:GetService("ReplicatedStorage")
 local Modules = RepStorage:WaitForChild("Modules")
 
 local SharedSystems = require(Modules:WaitForChild("SharedSystems"))
-task.wait()
 
+
+task.wait()
+local DataManager = SharedSystems.Modules.DataManager
 local Events = SharedSystems.Modules.EventManager
 local TestEvent = Events.CreateEvent(function()
 		print("Test")
@@ -28,13 +30,33 @@ local NewObj = NewObj:Append(
 		end)
 	}
 )
+local Arg2 = 10
+local NewObj = NewObj:Append(
+	{
+		Test2 = Events.CreateEvent(function(Arg1:number)
+			print(Arg1,"Shots Left")
+		end,function()
+			Arg2 -= 1
+			return Arg2
+		end)
+	}
+)
 task.spawn(function()
-	task.wait(10)
-	NewObj:Disconnect("Test2")
+	NewObj:Fire("Test2")
+	NewObj:Fire("Test2")
 end)
 
 print("Test1")
 NewObj:WaitUntil("Test2")
 print("Completed!")
+
+function PlayerAdded(Player:Player)
+	local Obj = DataManager.new(Player,{
+		Stats = {
+			TestVal1 = 10
+		}
+	})
+	
+end
 
 
