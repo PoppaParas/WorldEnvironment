@@ -3,5 +3,8 @@ return {
 	PlayerData = {
 		JoinTime = os.time()
 	},
-	Stats = {}
+	Stats = {
+		TestVal1 = 0,
+		TestVal2 = 0
+	}
 }
